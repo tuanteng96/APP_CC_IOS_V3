@@ -214,85 +214,91 @@ class App21 : NSObject, CLLocationManagerDelegate
                 self.caller.presentMultiImagePicker(isMulti: isMultiple, accept: accept, completion: { imagePaths in
                     NSLog("🖼️ Picked \(imagePaths.count) images")
 
-                    var out: [String] = []
-                    out.reserveCapacity(imagePaths.count)
+                    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                        guard let self = self else { return }
 
-                    let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                    let folder = docs.appendingPathComponent("ImagePicker", isDirectory: true)
-                    try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+                        var out: [String] = []
+                        out.reserveCapacity(imagePaths.count)
 
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "ddMMyyyyHHmmss"
+                        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                        let folder = docs.appendingPathComponent("ImagePicker", isDirectory: true)
+                        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
 
-                    for (idx, url) in imagePaths.enumerated() {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "ddMMyyyyHHmmss"
 
-                        // ===== Không nén -> copy như cũ =====
-                        if !shouldCompress {
-                            let src = DownloadFileTask().saveURL2(
-                                url: url,
-                                suffix: "ImagePicker-\(url.lastPathComponent)"
-                            )
-                            out.append(src)
-                            continue
-                        }
+                        for (idx, url) in imagePaths.enumerated() {
 
-                        // ===== Nén =====
-                        guard let image = UIImage(contentsOfFile: url.path) else {
-                            NSLog("⚠️ Cannot load UIImage from: %@", url.path)
-                            // fallback copy
-                            let src = DownloadFileTask().saveURL2(url: url, suffix: "ImagePicker-\(url.lastPathComponent)")
-                            out.append(src)
-                            continue
-                        }
-
-                        let fixed = image.fixedOrientation()
-
-                        // log size before (jpeg quality 1.0)
-                        if let before = fixed.jpegData(compressionQuality: 1.0) {
-                            self.logSize("Picker[\(idx)] original", before.count)
-                        } else {
-                            NSLog("📦 Picker[%d] original: (jpegData nil)", idx)
-                        }
-
-                        let resized = fixed.resized(maxSide: maxSide)
-
-                        if let afterResize = resized.jpegData(compressionQuality: 1.0) {
-                            self.logSize("Picker[\(idx)] after resize (maxSide=\(Int(maxSide)))", afterResize.count)
-                        }
-
-                        guard let finalData = resized.jpegData(maxKB: maxKB) else {
-                            NSLog("⚠️ Compress fail Picker[\(idx)] -> fallback copy")
-                            let src = DownloadFileTask().saveURL2(url: url, suffix: "ImagePicker-\(url.lastPathComponent)")
-                            out.append(src)
-                            continue
-                        }
-
-                        self.logSize("Picker[\(idx)] after compress (maxKB=\(maxKB))", finalData.count)
-
-                        // lưu file thật
-                        let fileName = "\(pref)-\(formatter.string(from: Date()))-\(idx).\(ext)"
-                        let fileURL = folder.appendingPathComponent(fileName)
-
-                        do {
-                            try finalData.write(to: fileURL, options: .atomic)
-
-                            if let attr = try? FileManager.default.attributesOfItem(atPath: fileURL.path),
-                               let size = attr[.size] as? Int {
-                                self.logSize("Picker[\(idx)] saved real", size)
-                                NSLog("Saved path: %@", fileURL.path)
+                            // ===== Không nén -> copy như cũ =====
+                            if !shouldCompress {
+                                let src = DownloadFileTask().saveURL2(
+                                    url: url,
+                                    suffix: "ImagePicker-\(url.lastPathComponent)"
+                                )
+                                out.append(src)
+                                continue
                             }
 
-                            out.append("local://\(fileURL.path)")
-                        } catch {
-                            NSLog("⚠️ Write fail Picker[\(idx)] -> fallback copy: %@", error.localizedDescription)
-                            let src = DownloadFileTask().saveURL2(url: url, suffix: "ImagePicker-\(url.lastPathComponent)")
-                            out.append(src)
+                            // ===== Nén =====
+                            guard let image = UIImage(contentsOfFile: url.path) else {
+                                NSLog("⚠️ Cannot load UIImage from: %@", url.path)
+                                // fallback copy
+                                let src = DownloadFileTask().saveURL2(url: url, suffix: "ImagePicker-\(url.lastPathComponent)")
+                                out.append(src)
+                                continue
+                            }
+
+                            let fixed = image.fixedOrientation()
+
+                            // log size before (jpeg quality 1.0)
+                            if let before = fixed.jpegData(compressionQuality: 1.0) {
+                                self.logSize("Picker[\(idx)] original", before.count)
+                            } else {
+                                NSLog("📦 Picker[%d] original: (jpegData nil)", idx)
+                            }
+
+                            let resized = fixed.resized(maxSide: maxSide)
+
+                            if let afterResize = resized.jpegData(compressionQuality: 1.0) {
+                                self.logSize("Picker[\(idx)] after resize (maxSide=\(Int(maxSide)))", afterResize.count)
+                            }
+
+                            guard let finalData = resized.jpegData(maxKB: maxKB) else {
+                                NSLog("⚠️ Compress fail Picker[\(idx)] -> fallback copy")
+                                let src = DownloadFileTask().saveURL2(url: url, suffix: "ImagePicker-\(url.lastPathComponent)")
+                                out.append(src)
+                                continue
+                            }
+
+                            self.logSize("Picker[\(idx)] after compress (maxKB=\(maxKB))", finalData.count)
+
+                            // lưu file thật
+                            let fileName = "\(pref)-\(formatter.string(from: Date()))-\(idx).\(ext)"
+                            let fileURL = folder.appendingPathComponent(fileName)
+
+                            do {
+                                try finalData.write(to: fileURL, options: .atomic)
+
+                                if let attr = try? FileManager.default.attributesOfItem(atPath: fileURL.path),
+                                   let size = attr[.size] as? Int {
+                                    self.logSize("Picker[\(idx)] saved real", size)
+                                    NSLog("Saved path: %@", fileURL.path)
+                                }
+
+                                out.append("local://\(fileURL.path)")
+                            } catch {
+                                NSLog("⚠️ Write fail Picker[\(idx)] -> fallback copy: %@", error.localizedDescription)
+                                let src = DownloadFileTask().saveURL2(url: url, suffix: "ImagePicker-\(url.lastPathComponent)")
+                                out.append(src)
+                            }
+                        }
+
+                        DispatchQueue.main.async {
+                            result.success = true
+                            result.data = JSON(out)
+                            self.App21Result(result: result)
                         }
                     }
-
-                    result.success = true
-                    result.data = JSON(out)
-                    self.App21Result(result: result)
                 })
             })
         }
