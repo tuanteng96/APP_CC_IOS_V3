@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+    <title></title>
+    <meta http-equiv="Content-Language" content="vi" />
+    <style type="text/css">
+        *, ::after, ::before { box-sizing: border-box; }
+        body { margin: 0; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; text-align: left; background-color: #fff; }
+        #DOT{ position:relative; display:inline-block}
+        #DOT:after { display: inline-block; position: absolute; content: attr(data-dot); display: inline-block;  }
+        #ANDROID_ONBACK_MESS{
+            z-index:9999;
+            position:fixed; top:auto; bottom:0; left:0; right:0; padding:30px; text-align:center;
+            background:#fff;
+            box-shadow:0 0 3px 0 rgba(0,0,0,0.5);
+            display:none
+        }
+    </style>
+    <script>
+        /**
+         * Mỗi khi Người dùng bấm nút back trên dt
+         * ANDROID_ONBACK sẽ đc thực thị
+         */
+        var ANDROID_ONBACK = function () {
+            if (!window.ANDROID) return;
+            if (!ANDROID.IsNoBack) {
+                document.getElementById('ANDROID_ONBACK_MESS').style.display = 'block';
+            }
+
+        }
+        var ANDROID_HIDE = function() {
+            window.ANDROID && ANDROID.NoBack(true);
+            document.getElementById('ANDROID_ONBACK_MESS').style.display = 'none';
+        }
+        
+    </script>
+</head>
+<body>
+    <script type="text/javascript">
+        var PREV_ERROR = false;
+        function ERROR() {
+            PREV_ERROR = true;
+            PREPARE();
+            var LOADERs = document.getElementById('LOADER');
+            //LOADERs.innerHTML = '<div class="preloaderEzs"></div>';
+        }
+        function PREPARE() {
+            var LOADER = document.getElementById('LOADER');
+            var sheet = document.createElement('style');
+            if (!LOADER) {
+                LOADER = document.createElement('div');
+                LOADER.innerHTML = '<div class="preloaderEzs"><div class="preloaderEzs-animation"><div class="preloaderEzs-spinner"></div><div class="preloaderEzs-text"><span data-text-preloader="E" class="letters-loading">E</span><span data-text-preloader="Z" class="letters-loading">Z</span><span data-text-preloader="S" class="letters-loading">S</span><span data-text-preloader="." class="letters-loading">.</span><span data-text-preloader="V" class="letters-loading">V</span><span data-text-preloader="N" class="letters-loading">N</span></div><div class="preloaderEzs-loading">Loading</div></div><div class="preloaderEzs-loader"><div class="preloaderEzs-row"><div class="preloaderEzs-col-3"><div class="preloaderEzs-bg"></div></div><div class="preloaderEzs-col-3"><div class="preloaderEzs-bg"></div></div><div class="preloaderEzs-col-3"><div class="preloaderEzs-bg"></div></div><div class="preloaderEzs-col-3"><div class="preloaderEzs-bg"></div></div></div></div></div>';
+                sheet.innerHTML = `
+                    @import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,900&display=swap);:root{--color-1:#000000;--color-2:#f26452;--color-3:#2ec0c9;--color-4:#ffffff;--font-site:'Poppins',sans-serif}*,body,html{box-sizing:border-box}body,html{margin:0;padding:0;background:#f7fdfc;min-height:100vh}.preloaderEzs{-webkit-box-align:center;-ms-flex-align:center;align-items:center;cursor:default;display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;position:fixed;left:0;top:0;width:100%;z-index:9000}.preloaderEzs .preloaderEzs-animation{z-index:1000}.preloaderEzs .preloaderEzs-spinner{-webkit-animation:spinner 1s infinite linear;animation:spinner 1s infinite linear;border-radius:50%;border:3px solid rgba(0,0,0,.2);border-top-color:var(--color-1);height:9em;margin:0 auto 3.5em auto;width:9em}.preloaderEzs .preloaderEzs-text{font:bold 5em var(--font-site);text-align:center;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.preloaderEzs .preloaderEzs-text .letters-loading{color:rgba(0,0,0,.2);position:relative}.preloaderEzs .preloaderEzs-text .letters-loading:before{-webkit-animation:letters-loading 4s infinite;animation:letters-loading 4s infinite;color:var(--color-1);content:attr(data-text-preloader);left:0;opacity:0;font-family:Poppins,sans-serif;position:absolute;top:-3px;-webkit-transform:rotateY(-90deg);transform:rotateY(-90deg)}.preloaderEzs .preloaderEzs-text .letters-loading:nth-child(1):before{-webkit-animation-delay:.2s;animation-delay:.2s;color:var(--color-2)}.preloaderEzs .preloaderEzs-text .letters-loading:nth-child(2):before{-webkit-animation-delay:.2s;animation-delay:.2s;color:var(--color-2)}.preloaderEzs .preloaderEzs-text .letters-loading:nth-child(3):before{-webkit-animation-delay:.4s;animation-delay:.4s;color:var(--color-3)}.preloaderEzs .preloaderEzs-text .letters-loading:nth-child(4):before{-webkit-animation-delay:.6s;animation-delay:.6s}.preloaderEzs .preloaderEzs-text .letters-loading:nth-child(5):before{-webkit-animation-delay:.8s;animation-delay:.8s}.preloaderEzs .preloaderEzs-text .letters-loading:nth-child(6):before{-webkit-animation-delay:1s;animation-delay:1s}.preloaderEzs .preloaderEzs-loading{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:8px;color:#3b3b3b;font-family:var(--font-site);text-align:center}.preloaderEzs .preloaderEzs-loader{position:fixed;top:0;left:0;width:100%;height:100%;font-size:0;z-index:1;pointer-events:none}.preloaderEzs .preloaderEzs-loader .preloaderEzs-row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px;height:100%}.preloaderEzs .preloaderEzs-loader .preloaderEzs-col-3{padding:0;position:relative;width:100%;min-height:1px;-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.preloaderEzs .preloaderEzs-loader .preloaderEzs-bg{background-color:var(--color-4);height:100%;left:0;width:100%;-webkit-transition:all .8s cubic-bezier(.77,0,.175,1);-o-transition:all .8s cubic-bezier(.77,0,.175,1);transition:all .8s cubic-bezier(.77,0,.175,1)}.preloaderEzs.preloaderEzs-hide .preloaderEzs-animation{opacity:0;-webkit-transition:.3s ease-out;-o-transition:.3s ease-out;transition:.3s ease-out}.preloaderEzs.preloaderEzs-hide .preloaderEzs-loader .preloaderEzs-bg{width:0;-webkit-transition:.7s .3s allcubic-bezier(.1,.1,.1,1);-o-transition:.7s .3s allcubic-bezier(.1,.1,.1,1);transition:.7s .3s allcubic-bezier(.1,.1,.1,1)}@keyframes spinner{to{transform:rotateZ(360deg)}}@keyframes letters-loading{0%,100%,75%{opacity:0;transform:rotateY(-90deg)}25%,50%{opacity:1;transform:rotateY(0)}}@media (max-width:767px){.preloaderEzs .preloaderEzs-text{font:bold 4em var(--font-site)}}@media (max-width:320px){.preloaderEzs .preloaderEzs-text{font:bold 3em var(--font-site)}}
+                `;
+                LOADER.id = 'LOADER';
+                LOADER.setAttribute('style', 'position: fixed; top: 0; left: 0; width: 100%; height: 100vh;');
+                document.body.appendChild(sheet);
+                document.body.appendChild(LOADER);
+            }
+            var ANDROID_ONBACK_MESS = document.getElementById('ANDROID_ONBACK_MESS');
+            if (!ANDROID_ONBACK_MESS) {
+                ANDROID_ONBACK_MESS = document.createElement('div');
+                ANDROID_ONBACK_MESS.id = "ANDROID_ONBACK_MESS";
+                ANDROID_ONBACK_MESS.innerHTML = 'Bấm thêm lần nữa để thoát';
+                document.body.appendChild(ANDROID_ONBACK_MESS);
+            }
+        }
+
+        var VER = '1001';
+
+        function LOAD(src, fn) {
+            
+            if (PREV_ERROR) return;
+            PREPARE();
+
+            function getExt(str) {
+                var a = ((str || '').split('?')[0] || '').split('.');
+                return a.length > 1 ? a.pop() : '';
+            }
+
+            var ext = getExt(src);
+            var arr = (src || '').split('?');
+            var _src = arr[0] + (arr.length > 1 ? '?' + arr[1] : '');
+           
+            switch (ext) {
+                case 'css':
+                    var l = document.createElement('link');
+                    l.href = _src + (arr.length > 1 ? '&' : '?') + 'ver=' + VER;
+                    l.onerror = ERROR;
+                    l.rel = "stylesheet";
+                    l.type = "text/css";
+                    l.onload = fn || null;
+                    document.head.appendChild(l);
+                    break;
+                default:
+                    var s = document.createElement('script');
+                    s.src = _src + (arr.length > 1 ? '&' : '?') + 'ver=' + VER;
+                    s.type = "text/javascript";
+                    s.onerror = ERROR;
+                    s.onload = fn || null;
+                    document.head.appendChild(s);
+                    break;
+            }
+        };
+
+        /**
+         * gửi yêu cầu tới app IOS || app Android
+         */
+        function app_request(cmd, value) {
+            if (window['ANDROID'])
+                ANDROID.Do(cmd, value);
+            else
+                window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.IOS.postMessage({
+                    "cmd": cmd,
+                    "value": value
+                })
+        }
+
+        /**
+         * App trả lời
+         */
+        function app_response(cmd, value) {
+            
+
+        }
+
+       
+
+        (function () {
+            try {
+                var DOT = setInterval(function () {
+                    var d = document.getElementById('DOT');
+                    if (!d) {
+                        clearInterval(DOT);
+                    }
+                    else {
+                        var n = (d.getAttribute('data-dot') || '');
+                        var a = {
+                            '3': '',
+                            '2': '...',
+                            '1': '..',
+                            '0': '.'
+                        };
+                        d.setAttribute('data-dot', a[n.length]);
+                    }
+                }, 500);
+                //LOAD('https://cser.vn/app/index.aspx?type=js&t=' + (new Date().getTime()))
+                LOAD('https://cser.vn/app/index.aspx?type=js&t=' + (new Date().getTime()))
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>

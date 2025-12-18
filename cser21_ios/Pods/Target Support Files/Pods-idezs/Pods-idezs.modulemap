@@ -1,0 +1,6 @@
+framework module Pods_idezs {
+  umbrella header "Pods-idezs-umbrella.h"
+
+  export *
+  module * { export * }
+}
