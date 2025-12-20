@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import Network
+import UIKit
+import CoreFoundation
 
 class XPZ: NSObject
 {
     var app21: App21? = nil;
     var result: Result? = nil;
-    //private var printer: POSPrinter? = null
-    //private var curConnect: IDeviceConnection? = null
     
     private var inited: Bool = false;
     private var connectStatus: Int = 0;
@@ -22,21 +23,19 @@ class XPZ: NSObject
     private var _ipAddress: String? = nil;
     
     private var width: Int = 320;
-    //private var printBmp: Bitmap? = nil;
-    //private var printText: String? = nil;
     private var printParam: XPZParam? = nil;
     
     private var resource: [URL?] = [];
     
-    var objp: ObjcPrint? = nil;
+    private var tcpPrinter: TCPPrinterConnection? = nil;
     
     
     
     
     @objc func reset()-> Void
     {
-        //printer = nil;
-        //curConnect = nil;
+        tcpPrinter?.disconnect()
+        tcpPrinter = nil
         connectStatus = 0;
         ipConnected = nil;
         printParam = nil;
@@ -65,33 +64,25 @@ class XPZ: NSObject
     @objc func connectNet(ipAddress: String, port: Int) throws -> Void
     
     {
-        if(objp == nil) {
-            objp = ObjcPrint();
+        if connectStatus != 0 {
+            return
         }
-        if(objp?.wifiManager == nil)
-        {
-            objp?.wifiManager  = POSWIFIManager();
-            
-            objp?.wifiManager.delegate = app21?.caller;
-        }
-        let _wifiManager = objp?.wifiManager;
+        connectStatus = 1
         
-        if(connectStatus != 0)
-        {
-            return;
-        }
-        connectStatus = 1;
-        
-        if (_wifiManager!.isConnect) {
-            //[_wifiManager, disconnect];
-            _wifiManager?.disconnect();
-            connectStatus = 1;
+        if tcpPrinter == nil {
+            tcpPrinter = TCPPrinterConnection()
         }
         
-        //[_wifiManager connectWithHost:self.wifiTextField.text port:9100];
-        _wifiManager?.connect(withHost: ipAddress, port: UInt16(port));
+        tcpPrinter?.connect(host: ipAddress, port: UInt16(port)) { [weak self] (result: Swift.Result<Void, Error>) in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.onConected(ip: ipAddress, port: port)
+            case .failure(let error):
+                self.onError(err: error.localizedDescription)
+            }
+        }
         
-        //check time out
         checkTimeout()
         
         
@@ -127,76 +118,56 @@ class XPZ: NSObject
             return;
         }
         
-        var br: Bool = false;
+        let paperWidth = Int(printParam?.paperWidth ?? 0)
+        let builder = ESCPosBuilder(paperWidth: paperWidth)
         
-        printParam?.items?.forEach({ xi in
+        do {
+            try builder.appendItems(printParam?.items ?? [], resourceCollector: &resource)
             
-            if(br){
-                return;
+            if printParam?.feedLine == true {
+                builder.appendFeedLine()
             }
-            if(xi.imageLocalPath != nil)
-            {
-                do{
-                    var url = xi.imageLocalPath;
-                    var data = try Data(contentsOf: url!);
-                    var img = UIImage(data: data);
-                    objp?.print(img, alignment: value(xi.alignment));
-                    resource.append(url);
-                }
-                catch{
-                    br = true;
-                    result?.success = false;
-                    result?.data = JSON("image fail:" + error.localizedDescription);
-                    app21?.App21Result(result: result!);
-                }
-            }
-            if(xi.text != nil){
-                //var  dataM = NSMutableData(data: POSCommand());
-                objp?.printText(xi.text, alignment: value(xi.alignment), attribute: value(xi.attribute), textSize: value(xi.textSize))
-            }
-            if(xi.base64 != nil)
-            {
-                do
-                {
-                    let dataDecoded: NSData = try Data(base64Encoded: xi.base64!, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters)! as NSData;
-                    
-                    var img = UIImage(data: dataDecoded as Data);
-                    objp?.print(img, alignment: value(xi.alignment));
-                    
-                }catch
-                {
-                    br = true;
-                    result?.success = false;
-                    result?.data = JSON("image fail:" + error.localizedDescription);
-                    app21?.App21Result(result: result!);
+            
+            let trailingFeed = printParam?.cutHalfAndFeed ?? 0
+            let shouldCut = printParam?.cutPaper ?? false
+            let printData = builder.data
+            self.printParam = nil
+            
+            tcpPrinter?.send(printData) { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    self.result?.success = false
+                    self.result?.data = JSON(error.localizedDescription)
+                    self.app21?.App21Result(result: self.result!)
+                    return
                 }
                 
+                let tailData = ESCPosBuilder.trailingCommands(feedLines: trailingFeed, cut: shouldCut)
+                if tailData.isEmpty {
+                    self.result?.success = true
+                    self.result?.data = JSON("done")
+                    self.app21?.App21Result(result: self.result!)
+                    return
+                }
                 
+                DispatchQueue.global().asyncAfter(deadline: .now() + 0.2) {
+                    self.tcpPrinter?.send(tailData) { tailError in
+                        if let tailError = tailError {
+                            self.result?.success = false
+                            self.result?.data = JSON(tailError.localizedDescription)
+                        } else {
+                            self.result?.success = true
+                            self.result?.data = JSON("done")
+                        }
+                        self.app21?.App21Result(result: self.result!)
+                    }
+                }
             }
-            //xi.deleteFilesIfHas();
-        })
-        
-        if(printParam?.feedLine == true)
-        {
-            objp?.feedLine()
+        } catch {
+            result?.success = false
+            result?.data = JSON("image fail:" + error.localizedDescription)
+            app21?.App21Result(result: result!)
         }
-        if(printParam?.cutHalfAndFeed != nil && printParam?.cutHalfAndFeed! ?? 0  > 0)
-        {
-            objp?.cutHalfAndFeed(value(printParam?.cutHalfAndFeed))
-        }
-        if(printParam?.cutPaper == true)
-        {
-            objp?.cutPaper();
-        }
-    
-        self.printParam = nil;
-        if(br)
-        {
-            return;
-        }
-        result?.success = true;
-        result?.data = JSON("done");
-        app21?.App21Result(result: result!);
     }
     //MARK: printParam
     @objc func printParam(ipAddress: String, port: Int, param: XPZParam?) -> Void
@@ -302,6 +273,7 @@ class XPZItem: NSObject, Decodable
 }
 class XPZParam: NSObject, Decodable{
     var items: [XPZItem]? = nil;
+    var paperWidth: Int? = 0;
     var feedLine: Bool? = true;
     var cutHalfAndFeed: Int? = 1;
     var cutPaper: Bool? = true;
@@ -313,4 +285,264 @@ class XPZTable: NSObject, Decodable {
     var align: [Int]? = nil;
     var rows: [[String]]? = nil;
     
+}
+
+final class TCPPrinterConnection {
+    private let queue = DispatchQueue(label: "xpz.printer.tcp")
+    private var connection: NWConnection?
+    private var targetHost: String?
+    private var targetPort: UInt16?
+    
+    func connect(host: String, port: UInt16, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+        targetHost = host
+        targetPort = port
+        var didComplete = false
+        
+        let endpointHost = NWEndpoint.Host(host)
+        guard let endpointPort = NWEndpoint.Port(rawValue: port) else {
+            completion(.failure(NSError(domain: "TCPPrinter", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid port"])))
+            return
+        }
+        
+        let connection = NWConnection(host: endpointHost, port: endpointPort, using: .tcp)
+        self.connection = connection
+        
+        connection.stateUpdateHandler = { state in
+            switch state {
+            case .ready:
+                if !didComplete {
+                    didComplete = true
+                    completion(.success(()))
+                }
+            case .failed(let error):
+                if !didComplete {
+                    didComplete = true
+                    completion(.failure(error))
+                }
+            case .cancelled:
+                if !didComplete {
+                    didComplete = true
+                    completion(.failure(NSError(domain: "TCPPrinter", code: -2, userInfo: [NSLocalizedDescriptionKey: "Connection cancelled"])))
+                }
+            default:
+                break
+            }
+        }
+        
+        connection.start(queue: queue)
+    }
+    
+    func send(_ data: Data, completion: @escaping (Error?) -> Void) {
+        guard let connection = connection else {
+            completion(NSError(domain: "TCPPrinter", code: -3, userInfo: [NSLocalizedDescriptionKey: "Not connected"]))
+            return
+        }
+        let chunkSize = 2048
+        var offset = 0
+        
+        func sendNext() {
+            if offset >= data.count {
+                completion(nil)
+                return
+            }
+            let end = min(offset + chunkSize, data.count)
+            let chunk = data.subdata(in: offset..<end)
+            connection.send(content: chunk, completion: .contentProcessed { error in
+                if let error = error {
+                    completion(error)
+                    return
+                }
+                offset = end
+                if data.count > chunkSize {
+                    self.queue.asyncAfter(deadline: .now() + 0.01) {
+                        sendNext()
+                    }
+                } else {
+                    sendNext()
+                }
+            })
+        }
+        
+        sendNext()
+    }
+    
+    func disconnect() {
+        connection?.cancel()
+        connection = nil
+    }
+}
+
+final class ESCPosBuilder {
+    private(set) var data = Data()
+    private let paperWidth: Int
+    
+    init(paperWidth: Int) {
+        self.paperWidth = paperWidth
+        appendInitialize()
+    }
+    
+    func appendItems(_ items: [XPZItem], resourceCollector: inout [URL?]) throws {
+        for item in items {
+            if let url = item.imageLocalPath {
+                let fileData = try Data(contentsOf: url)
+                resourceCollector.append(url)
+                guard let image = UIImage(data: fileData) else {
+                    throw NSError(domain: "ESCPosBuilder", code: -10, userInfo: [NSLocalizedDescriptionKey: "Invalid image data"])
+                }
+                appendImage(image, alignment: Int(item.alignment ?? 0), targetWidth: Int(item.width ?? 0))
+            }
+            
+            if let text = item.text {
+                appendText(text, alignment: Int(item.alignment ?? 0))
+            }
+            
+            if let base64 = item.base64 {
+                let raw = base64.replacingOccurrences(of: "data:image/png;base64,", with: "")
+                guard let imageData = Data(base64Encoded: raw, options: .ignoreUnknownCharacters),
+                      let image = UIImage(data: imageData) else {
+                    throw NSError(domain: "ESCPosBuilder", code: -11, userInfo: [NSLocalizedDescriptionKey: "Invalid base64 image"])
+                }
+                appendImage(image, alignment: Int(item.alignment ?? 0), targetWidth: Int(item.width ?? 0))
+            }
+        }
+    }
+    
+    func appendText(_ text: String, alignment: Int) {
+        data.append(contentsOf: [0x1B, 0x61, UInt8(clampAlignment(alignment))])
+        data.append(contentsOf: [0x1B, 0x2D, 0x01])
+        data.append(contentsOf: [0x1B, 0x45, 0x01])
+        let cfEncoding = CFStringEncoding(CFStringEncodings.GB_18030_2000.rawValue)
+        let encoding = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(cfEncoding))
+        if let encoded = text.data(using: encoding) {
+            data.append(encoded)
+        }
+    }
+    
+    func appendFeedLine() {
+        data.append(0x0A)
+    }
+    
+    func appendFeedLines(_ lines: Int) {
+        let n = UInt8(max(0, min(lines, 255)))
+        data.append(contentsOf: [0x1B, 0x64, n])
+    }
+    
+    func appendCut() {
+        data.append(contentsOf: [0x1D, 0x56, 0x00])
+    }
+
+    static func trailingCommands(feedLines: Int, cut: Bool) -> Data {
+        var tail = Data()
+        let n = UInt8(max(0, min(feedLines, 255)))
+        if n > 0 {
+            tail.append(contentsOf: [0x1B, 0x64, n])
+        }
+        if cut {
+            tail.append(contentsOf: [0x1D, 0x56, 0x00])
+        }
+        return tail
+    }
+    
+    private func appendInitialize() {
+        data.append(contentsOf: [0x1B, 0x40])
+    }
+    
+    private func appendImage(_ image: UIImage, alignment: Int, targetWidth: Int) {
+        data.append(contentsOf: [0x1B, 0x61, UInt8(clampAlignment(alignment))])
+        
+        let maxWidth = effectivePaperWidth()
+        let desiredWidth = targetWidth > 0 ? min(targetWidth, maxWidth) : maxWidth
+        let scaled = scaleImage(image, targetWidth: desiredWidth)
+        let raster = rasterizeImageBands(scaled, bandHeight: 24)
+        data.append(raster)
+        data.append(0x0A)
+    }
+    
+    private func clampAlignment(_ value: Int) -> Int {
+        if value < 0 { return 0 }
+        if value > 2 { return 2 }
+        return value
+    }
+    
+    private func effectivePaperWidth() -> Int {
+        if paperWidth > 0 {
+            return paperWidth
+        }
+        return 576
+    }
+    
+    private func scaleImage(_ image: UIImage, targetWidth: Int) -> UIImage {
+        guard let cgImage = image.cgImage else { return image }
+        let width = cgImage.width
+        let height = cgImage.height
+        if width <= targetWidth || targetWidth <= 0 {
+            return image
+        }
+        let scale = CGFloat(targetWidth) / CGFloat(width)
+        let targetHeight = Int(CGFloat(height) * scale)
+        let newSize = CGSize(width: targetWidth, height: targetHeight)
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: CGRect(origin: .zero, size: newSize))
+        let scaled = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return scaled ?? image
+    }
+    
+    private func rasterizeImageBands(_ image: UIImage, bandHeight: Int) -> Data {
+        guard let cgImage = image.cgImage else { return Data() }
+        let width = cgImage.width
+        let height = cgImage.height
+        
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let bytesPerRow = width
+        var pixels = [UInt8](repeating: 0, count: width * height)
+        
+        guard let context = CGContext(
+            data: &pixels,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: bytesPerRow,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.none.rawValue
+        ) else {
+            return Data()
+        }
+        
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        let bytesPerRowBits = (width + 7) / 8
+        var bitmap = [UInt8](repeating: 0, count: bytesPerRowBits * height)
+        
+        for y in 0..<height {
+            for x in 0..<width {
+                let pixel = pixels[y * width + x]
+                if pixel < 128 {
+                    let index = y * bytesPerRowBits + (x / 8)
+                    bitmap[index] |= (0x80 >> (x % 8))
+                }
+            }
+        }
+        
+        var output = Data()
+        let xL = UInt8(bytesPerRowBits & 0xFF)
+        let xH = UInt8((bytesPerRowBits >> 8) & 0xFF)
+        let step = max(1, bandHeight)
+        
+        var y = 0
+        while y < height {
+            let bandRows = min(step, height - y)
+            let yL = UInt8(bandRows & 0xFF)
+            let yH = UInt8((bandRows >> 8) & 0xFF)
+            output.append(contentsOf: [0x1D, 0x76, 0x30, 0x00, xL, xH, yL, yH])
+            
+            let start = y * bytesPerRowBits
+            let end = start + bandRows * bytesPerRowBits
+            output.append(contentsOf: bitmap[start..<end])
+            y += bandRows
+        }
+        
+        return output
+    }
 }

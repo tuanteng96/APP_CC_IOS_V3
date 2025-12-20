@@ -2,4 +2,4 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
-#import "XPZ.h"
+// Swift-only build; no Objective-C headers required.

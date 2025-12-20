@@ -16,7 +16,7 @@ import SystemConfiguration.CaptiveNetwork
 import PhotosUI
 import UniformTypeIdentifiers
 
-class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognizerDelegate,CLLocationManagerDelegate ,AVAudioRecorderDelegate, WKNavigationDelegate, POSWIFIManagerDelegate,
+class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognizerDelegate,CLLocationManagerDelegate ,AVAudioRecorderDelegate, WKNavigationDelegate,
     PHPickerViewControllerDelegate, UIImagePickerControllerDelegate ,
     UIDocumentPickerDelegate, UINavigationControllerDelegate{
     
@@ -27,34 +27,10 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
     let domain = "https://cser.vn/";
     
     var qrCodeResult: Result = Result()
+    var scanBarcodeResult: Result? = nil
+    var scanBarcodeIsMultiple: Bool = false
     
     var isShowLoading = false
-    
-    //21/10/2024
-    //MARK: POSwifiConnectedToHost
-    
-    func poSwifiConnected(toHost host: String?, port: UInt16) -> Void
-    {
-        if(app21 == nil){
-            app21 = App21(viewController: self)
-        }
-        app21?.XPRINT_Connected(host: host, port: Int(port))
-    }
-    
-    func POSwifiConnectedToHost(toHost host: String?, port: UInt16) -> Void
-    {
-        
-    }
-    
-    private func POSwifiDisconnectWithError(error: String?) -> Void
-    {
-        if(app21 == nil){
-            app21 = App21(viewController: self)
-        }
-        app21?.XPrint_Error(err: error!)
-
-    }
-    //end 21/10/2024
     
     //MARK: - Location
     // MARK: - Location
@@ -602,6 +578,7 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
             NotificationCenter.default.addObserver(self, selector: #selector(onNotificationClick) , name: NSNotification.Name(rawValue: "NotificationClick"), object: nil)
             
             NotificationCenter.default.addObserver(self, selector: #selector(onQrCode) , name: NSNotification.Name(rawValue: "QRCODE"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(onScanBarcode) , name: NSNotification.Name(rawValue: "SCAN_BARCODE_RESULT"), object: nil)
     }
     
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
@@ -628,6 +605,29 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
         }
         app21?.App21Result(result: qrCodeResult)
 
+    }
+    
+    @objc func onScanBarcode(notification: Notification)
+    {
+        guard let result = scanBarcodeResult else {
+            return
+        }
+        
+        if scanBarcodeIsMultiple {
+            let codes = notification.userInfo?["codes"] as? [String] ?? []
+            result.data = JSON(codes)
+        } else {
+            let code = notification.userInfo?["code"] as? String ?? ""
+            result.data = JSON(code)
+        }
+        result.success = true
+        if(app21 == nil)
+        {
+            app21 = App21(viewController: self)
+        }
+        app21?.App21Result(result: result)
+        scanBarcodeResult = nil
+        scanBarcodeIsMultiple = false
     }
     
     //MARK: - DidBecomeActive

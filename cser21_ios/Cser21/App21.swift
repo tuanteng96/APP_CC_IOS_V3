@@ -102,6 +102,7 @@ class App21 : NSObject, CLLocationManagerDelegate
                 "CAMERA",
                 "RECORD_VIDEO",
                 "OPEN_QRCODE",
+                "SCAN_BARCODE",
                 "BACKGROUND",
                 "STATUS_BAR_COLOR",
                 "WV_VISIBLE"
@@ -897,6 +898,32 @@ class App21 : NSObject, CLLocationManagerDelegate
         }
     }
     
+    @objc func SCAN_BARCODE(result: Result) -> Void
+    {
+        var scanType = "barcode"
+        var isMultiple = false
+        
+        if let params = result.params, let data = params.data(using: .utf8), let json = try? JSON(data: data) {
+            if json["type"].exists() {
+                scanType = json["type"].stringValue
+            }
+            if json["isMultiple"].exists() {
+                isMultiple = json["isMultiple"].boolValue
+            }
+        }
+        
+        caller.scanBarcodeResult = result
+        caller.scanBarcodeIsMultiple = isMultiple
+        
+        DispatchQueue.main.async {
+            if let controller = self.caller.storyboard?.instantiateViewController(withIdentifier: "QrCodeController") as? QrCodeController {
+                controller.scanType = scanType
+                controller.isMultiple = isMultiple
+                self.caller.show(controller, sender: self)
+            }
+        }
+    }
+    
     
     enum PermissionName: String{
         case camera, video, photoLibrary
@@ -1421,6 +1448,10 @@ class App21 : NSObject, CLLocationManagerDelegate
                     if(json["port"].exists())
                     {
                         port = json["port"].intValue;
+                    }
+                    if (port == nil || port == 0) && json["param"]["port"].exists()
+                    {
+                        port = json["param"]["port"].intValue;
                     }
 
                     if(port == nil || port == 0)

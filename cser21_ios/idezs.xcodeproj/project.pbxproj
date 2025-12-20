@@ -36,10 +36,8 @@
 		34B777A7241B82EB00787FE3 /* Cser21UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B777A6241B82EB00787FE3 /* Cser21UITests.swift */; };
 		6B963C9776D581DE0051B5F3 /* Pods_idezs_idezsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3119144C0E3176DC72E66 /* Pods_idezs_idezsUITests.framework */; };
 		6C46848DF983A162D43157FC /* Pods_idezs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FA41B00383E9A1234995BC /* Pods_idezs.framework */; };
-		B72FD14A2D1A68020097D521 /* XPZ.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FD1472D1A68020097D521 /* XPZ.m */; };
 		B72FD14B2D1A68020097D521 /* XPZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72FD1482D1A68020097D521 /* XPZ.swift */; };
 		B72FD14C2D1A68020097D521 /* X_GET_OR_CACHED.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72FD1492D1A68020097D521 /* X_GET_OR_CACHED.swift */; };
-		B72FD14F2D1A687D0097D521 /* libPrinterSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B72FD14E2D1A68680097D521 /* libPrinterSDK.a */; };
 		B7641A112E6050A900106F9D /* Framework7Icons-Regular.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = B7641A0F2E6050A900106F9D /* Framework7Icons-Regular.woff2 */; };
 		B7641A122E6050A900106F9D /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = B7641A0B2E6050A900106F9D /* index.js */; };
 		B7641A132E6050A900106F9D /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = B7641A092E6050A900106F9D /* index.css */; };
@@ -125,19 +123,14 @@
 		6DA9721AD4A8C2DCE7D4090F /* Pods-idezs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-idezs.release.xcconfig"; path = "Target Support Files/Pods-idezs/Pods-idezs.release.xcconfig"; sourceTree = "<group>"; };
 		7E6DC35D9FE629F4ADB4A866 /* Pods_idezsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_idezsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7FA41B00383E9A1234995BC /* Pods_idezs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_idezs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B72FD1462D1A68020097D521 /* XPZ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPZ.h; path = ../../XPZ.h; sourceTree = "<group>"; };
-		B72FD1472D1A68020097D521 /* XPZ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPZ.m; path = ../../XPZ.m; sourceTree = "<group>"; };
 		B72FD1482D1A68020097D521 /* XPZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XPZ.swift; path = ../../XPZ.swift; sourceTree = "<group>"; };
 		B72FD1492D1A68020097D521 /* X_GET_OR_CACHED.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = X_GET_OR_CACHED.swift; path = ../../X_GET_OR_CACHED.swift; sourceTree = "<group>"; };
-		B72FD14D2D1A684A0097D521 /* PrinterSDK */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PrinterSDK; path = ../PrinterSDK; sourceTree = "<group>"; };
-		B72FD14E2D1A68680097D521 /* libPrinterSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPrinterSDK.a; path = ../PrinterSDK/libPrinterSDK.a; sourceTree = "<group>"; };
 		B7641A092E6050A900106F9D /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = index.css; sourceTree = "<group>"; };
 		B7641A0B2E6050A900106F9D /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
 		B7641A0E2E6050A900106F9D /* Framework7Icons-Regular.woff */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Framework7Icons-Regular.woff"; sourceTree = "<group>"; };
 		B7641A0F2E6050A900106F9D /* Framework7Icons-Regular.woff2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Framework7Icons-Regular.woff2"; sourceTree = "<group>"; };
 		B7CC7AA42B57718700E268BD /* WiffiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiffiManager.swift; sourceTree = "<group>"; };
 		B7E2BD592CF856510087643F /* ezsspa-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ezsspa-Bridging-Header.h"; sourceTree = "<group>"; };
-		B7E2BD612CF858690087643F /* libPrinterSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPrinterSDK.a; path = Cser21/PrinterSDK/libPrinterSDK.a; sourceTree = "<group>"; };
 		D8766D531E7A7766FF30FF8F /* Pods-idezs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-idezs.debug.xcconfig"; path = "Target Support Files/Pods-idezs/Pods-idezs.debug.xcconfig"; sourceTree = "<group>"; };
 		D8FFBB435C4F33924C0F3F04 /* Pods-idezs-idezsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-idezs-idezsUITests.debug.xcconfig"; path = "Target Support Files/Pods-idezs-idezsUITests/Pods-idezs-idezsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF94C6E8277D500E0015CCA5 /* QrCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrCodeController.swift; sourceTree = "<group>"; };
@@ -148,7 +141,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B72FD14F2D1A687D0097D521 /* libPrinterSDK.a in Frameworks */,
 				6C46848DF983A162D43157FC /* Pods_idezs.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -223,8 +215,6 @@
 			children = (
 				B7641A102E6050A900106F9D /* assets */,
 				B72FD1492D1A68020097D521 /* X_GET_OR_CACHED.swift */,
-				B72FD1462D1A68020097D521 /* XPZ.h */,
-				B72FD1472D1A68020097D521 /* XPZ.m */,
 				B72FD1482D1A68020097D521 /* XPZ.swift */,
 				B7CC7AA42B57718700E268BD /* WiffiManager.swift */,
 				20EA7B302EC352F1002DA331 /* GoogleService-Info.plist */,
@@ -307,9 +297,6 @@
 		BB12C00E7D00844D8DDDB9AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B72FD14E2D1A68680097D521 /* libPrinterSDK.a */,
-				B72FD14D2D1A684A0097D521 /* PrinterSDK */,
-				B7E2BD612CF858690087643F /* libPrinterSDK.a */,
 				18D8AD63243DC8C300976BF4 /* UserNotifications.framework */,
 				18D8AD65243DC8C300976BF4 /* UserNotificationsUI.framework */,
 				A7FA41B00383E9A1234995BC /* Pods_idezs.framework */,
@@ -590,7 +577,6 @@
 				181663FE243CF2930097A451 /* ImageUtil.swift in Sources */,
 				18424FBC2425C8D1006D6B63 /* App21.swift in Sources */,
 				18DED9D1243D7745001771B2 /* Noti21.swift in Sources */,
-				B72FD14A2D1A68020097D521 /* XPZ.m in Sources */,
 				B72FD14C2D1A68020097D521 /* X_GET_OR_CACHED.swift in Sources */,
 				18D9AAF424504B8E0080BFCA /* Fetch21.swift in Sources */,
 				18D8AD4D243DB15600976BF4 /* extension.swift in Sources */,
@@ -800,7 +786,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Cser21/PrinterSDK",
 				);
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.idezs;
@@ -838,7 +823,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Cser21/PrinterSDK",
 				);
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.idezs;

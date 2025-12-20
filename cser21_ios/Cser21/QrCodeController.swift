@@ -15,6 +15,10 @@ class QrCodeController: UIViewController {
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
     var isSendNotif = false
+    var scanType: String = "barcode"
+    var isMultiple: Bool = false
+    var scanResults: [String] = []
+    private var statusLabel: UILabel?
     @IBOutlet weak var qrCodeView: UIView!
     @IBOutlet weak var btBack: UIImageView!
     @IBOutlet weak var btFlash: UIImageView!
@@ -32,7 +36,13 @@ class QrCodeController: UIViewController {
                                       AVMetadataObject.ObjectType.dataMatrix,
                                       AVMetadataObject.ObjectType.interleaved2of5,
                                       AVMetadataObject.ObjectType.qr]
+    private lazy var barcodeTypes: [AVMetadataObject.ObjectType] = {
+        return supportedCodeTypes.filter { $0 != .qr }
+    }()
     @objc func onBack(_ ges: UITapGestureRecognizer) {
+        if isMultiple {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SCAN_BARCODE_RESULT"), object: nil, userInfo: ["codes" : scanResults])
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -77,6 +87,18 @@ class QrCodeController: UIViewController {
         btFlash.addGestureRecognizer(gesFlash)
         btFlash.isUserInteractionEnabled = true
         
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .white
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        label.layer.cornerRadius = 8
+        label.clipsToBounds = true
+        label.alpha = 0
+        label.layer.zPosition = 2
+        statusLabel = label
+        
         
         
         // Get the back-facing camera for capturing videos
@@ -99,13 +121,23 @@ class QrCodeController: UIViewController {
             // Set delegate and use the default dispatch queue to execute the call back
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
 //            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
-            captureMetadataOutput.metadataObjectTypes = supportedCodeTypes
+            if scanType == "qrcode" {
+                captureMetadataOutput.metadataObjectTypes = [.qr]
+            } else if scanType == "barcode" {
+                captureMetadataOutput.metadataObjectTypes = barcodeTypes
+            } else {
+                captureMetadataOutput.metadataObjectTypes = supportedCodeTypes
+            }
             
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             videoPreviewLayer?.frame = view.layer.bounds
             qrCodeView.layer.addSublayer(videoPreviewLayer!)
+            if let label = statusLabel {
+                qrCodeView.addSubview(label)
+                qrCodeView.bringSubviewToFront(label)
+            }
             
             // Start video capture
             captureSession.startRunning()
@@ -147,14 +179,54 @@ extension QrCodeController: AVCaptureMetadataOutputObjectsDelegate {
             let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
-            if metadataObj.stringValue != nil {
-                let code = String(describing: metadataObj.stringValue)
+            if let code = metadataObj.stringValue, !code.isEmpty {
+                if isMultiple {
+                    if scanResults.contains(code) {
+                        showStatus("Mã \(code) đã có")
+                    } else {
+                        scanResults.append(code)
+                        showStatus("Đã ghi nhận mã \(code)")
+                    }
+                    return
+                }
                 if (!isSendNotif) {
                     isSendNotif = true
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "QRCODE") , object: nil, userInfo: ["code" : code])
-                    self.dismiss(animated: true, completion: nil)
+                    if isMultiple {
+                        showStatus("Đã ghi nhận mã \(code)")
+                    }
+                    let notifName = scanType == "qrcode" ? "QRCODE" : "SCAN_BARCODE_RESULT"
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: notifName) , object: nil, userInfo: ["code" : code])
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
         }
+    }
+}
+
+private extension QrCodeController {
+    func showStatus(_ message: String) {
+        guard let label = statusLabel else { return }
+        label.text = message
+        let padding: CGFloat = 12
+        let maxWidth = qrCodeView.bounds.width - 32
+        let size = label.sizeThatFits(CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude))
+        let labelWidth = min(maxWidth, size.width + padding * 2)
+        let labelHeight = size.height + padding
+        let yPos = max(16, qrCodeView.bounds.height - 50 - labelHeight)
+        label.frame = CGRect(
+            x: (qrCodeView.bounds.width - labelWidth) / 2,
+            y: yPos,
+            width: labelWidth,
+            height: labelHeight
+        )
+        label.alpha = 1
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(hideStatus), object: nil)
+        perform(#selector(hideStatus), with: nil, afterDelay: 1.2)
+    }
+    
+    @objc func hideStatus() {
+        statusLabel?.alpha = 0
     }
 }
