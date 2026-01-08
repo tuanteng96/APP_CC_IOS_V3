@@ -364,6 +364,15 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
         loadView();
         viewDidLoad();
     }
+
+    //MARK: - reloadWebView
+    func reloadWebView() {
+        if wv == nil {
+            setUpWebView()
+            return
+        }
+        wv.reload()
+    }
     
     //MARK: - evalJs
     func evalJs(str: String)

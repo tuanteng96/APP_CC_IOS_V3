@@ -105,7 +105,8 @@ class App21 : NSObject, CLLocationManagerDelegate
                 "SCAN_BARCODE",
                 "BACKGROUND",
                 "STATUS_BAR_COLOR",
-                "WV_VISIBLE"
+                "WV_VISIBLE",
+                "RELOAD_WEBVIEW"
             ]
 
             if uiCommands.contains(cmd) {
@@ -895,6 +896,16 @@ class App21 : NSObject, CLLocationManagerDelegate
         DispatchQueue.main.async {
             self.caller.show(self.caller.storyboard!.instantiateViewController(withIdentifier: "QrCodeController"), sender: self)
             
+        }
+    }
+
+    //MARK: - RELOAD_WEBVIEW
+    @objc func RELOAD_WEBVIEW(result: Result) -> Void {
+        result.success = true
+        App21Result(result: result)
+
+        DispatchQueue.main.async {
+            self.caller.reloadWebView()
         }
     }
     
