@@ -115,8 +115,6 @@
         var NEW_APP = true
 
     </script>
-    
-    <link rel="modulepreload" crossorigin href="../assets/js/vendor.js">
         
 </head>
 <body>
@@ -159,6 +157,7 @@
 
 
         }
+
         function box(fn) {
             try {
                 fn && fn();
@@ -169,8 +168,6 @@
 
         const SCRIPT_START = 'SCRIPT_START';
         const SCRIPT_INDEX = 'SCRIPT_INDEX';
-
-
 
         function __embedJs(s) {
             var t = document.createElement('script');
@@ -241,6 +238,10 @@
             app_request("call", JSON.stringify({ sub_cmd: 'WV_VISIBLE', sub_cmd_id: -999, params: '1' }));
 
         });
+
+        function AppNetworkChanged(isOnline) {
+            window.NetworkChanged && window.NetworkChanged(isOnline);
+        }
 
     </script>
 </body>

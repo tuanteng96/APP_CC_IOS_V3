@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import Network
 import Firebase
 import MapKit
 import CoreLocation
@@ -31,6 +32,10 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
     var scanBarcodeIsMultiple: Bool = false
     
     var isShowLoading = false
+
+    private let networkMonitor = NWPathMonitor()
+    private let networkMonitorQueue = DispatchQueue(label: "NetworkMonitor")
+    private var isNetworkAvailable = true
     
     //MARK: - Location
     // MARK: - Location
@@ -465,6 +470,9 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
             //
             
             wv = WKWebView(frame: frm, configuration: webConfiguration);
+            if #available(iOS 16.4, *) {
+                wv.isInspectable = true
+            }
             wv.navigationDelegate = self
             //setBackground(params: nil);
             //view.backgroundColor = bg;
@@ -684,9 +692,27 @@ class ViewController: UIViewController,WKScriptMessageHandler,UIGestureRecognize
         //ss = "document.body.innerHTML='hihi'"; => test
         wv.evaluateJavaScript(ss)
         //end 21/10/2024
+
+        startNetworkMonitor()
         
                 
 //        UIApplication.shared.statusBarUIView?.backgroundColor = UIColor.white
+    }
+
+    deinit {
+        networkMonitor.cancel()
+    }
+
+    private func startNetworkMonitor() {
+        networkMonitor.pathUpdateHandler = { [weak self] path in
+            let isOnline = (path.status == .satisfied)
+            guard let self = self, self.isNetworkAvailable != isOnline else { return }
+            self.isNetworkAvailable = isOnline
+            DispatchQueue.main.async {
+                self.evalJs(str: "AppNetworkChanged(\(isOnline ? "true" : "false"))")
+            }
+        }
+        networkMonitor.start(queue: networkMonitorQueue)
     }
          
     

@@ -24,7 +24,6 @@
 		18DED9D1243D7745001771B2 /* Noti21.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DED9D0243D7745001771B2 /* Noti21.swift */; };
 		18DED9D3243D783B001771B2 /* SERVER_NOTI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DED9D2243D783B001771B2 /* SERVER_NOTI.swift */; };
 		20982AC82E68319A003B0437 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 20982AC72E68319A003B0437 /* PrivacyInfo.xcprivacy */; };
-		20CF747F2E6C5C51005816CC /* vendor.js in Resources */ = {isa = PBXBuildFile; fileRef = 20CF747E2E6C5C51005816CC /* vendor.js */; };
 		20EA7B312EC352F1002DA331 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 20EA7B302EC352F1002DA331 /* GoogleService-Info.plist */; };
 		349088FA241B8A3D004AD9A0 /* embed.html in Resources */ = {isa = PBXBuildFile; fileRef = 349088F9241B8A3D004AD9A0 /* embed.html */; };
 		34B77787241B82EA00787FE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B77786241B82EA00787FE3 /* AppDelegate.swift */; };
@@ -36,12 +35,15 @@
 		34B777A7241B82EB00787FE3 /* Cser21UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B777A6241B82EB00787FE3 /* Cser21UITests.swift */; };
 		6B963C9776D581DE0051B5F3 /* Pods_idezs_idezsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49C3119144C0E3176DC72E66 /* Pods_idezs_idezsUITests.framework */; };
 		6C46848DF983A162D43157FC /* Pods_idezs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7FA41B00383E9A1234995BC /* Pods_idezs.framework */; };
+		B708E1A42F178C2300913FD8 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = B708E19B2F178C2300913FD8 /* index.css */; };
+		B708E1A52F178C2300913FD8 /* Framework7Icons-Regular.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = B708E1A22F178C2300913FD8 /* Framework7Icons-Regular.woff2 */; };
+		B708E1A62F178C2300913FD8 /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = B708E19D2F178C2300913FD8 /* index.js */; };
+		B708E1A72F178C2300913FD8 /* pages.js in Resources */ = {isa = PBXBuildFile; fileRef = B708E19E2F178C2300913FD8 /* pages.js */; };
+		B708E1A82F178C2300913FD8 /* Framework7Icons-Regular.woff in Resources */ = {isa = PBXBuildFile; fileRef = B708E1A12F178C2300913FD8 /* Framework7Icons-Regular.woff */; };
+		B708E1A92F178C2300913FD8 /* vendor.js in Resources */ = {isa = PBXBuildFile; fileRef = B708E19F2F178C2300913FD8 /* vendor.js */; };
+		B708E1AA2F178C2300913FD8 /* assets_bundle in Resources */ = {isa = PBXBuildFile; fileRef = B708E1AB2F178C2300913FD8 /* assets_bundle */; };
 		B72FD14B2D1A68020097D521 /* XPZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72FD1482D1A68020097D521 /* XPZ.swift */; };
 		B72FD14C2D1A68020097D521 /* X_GET_OR_CACHED.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72FD1492D1A68020097D521 /* X_GET_OR_CACHED.swift */; };
-		B7641A112E6050A900106F9D /* Framework7Icons-Regular.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = B7641A0F2E6050A900106F9D /* Framework7Icons-Regular.woff2 */; };
-		B7641A122E6050A900106F9D /* index.js in Resources */ = {isa = PBXBuildFile; fileRef = B7641A0B2E6050A900106F9D /* index.js */; };
-		B7641A132E6050A900106F9D /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = B7641A092E6050A900106F9D /* index.css */; };
-		B7641A142E6050A900106F9D /* Framework7Icons-Regular.woff in Resources */ = {isa = PBXBuildFile; fileRef = B7641A0E2E6050A900106F9D /* Framework7Icons-Regular.woff */; };
 		B7CC7AA52B57718700E268BD /* WiffiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7CC7AA42B57718700E268BD /* WiffiManager.swift */; };
 		E80E0D389156B253E98B6A8C /* Pods_idezsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6DC35D9FE629F4ADB4A866 /* Pods_idezsTests.framework */; };
 		EF94C6E9277D500E0015CCA5 /* QrCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF94C6E8277D500E0015CCA5 /* QrCodeController.swift */; };
@@ -100,7 +102,6 @@
 		18DED9D0243D7745001771B2 /* Noti21.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Noti21.swift; sourceTree = "<group>"; };
 		18DED9D2243D783B001771B2 /* SERVER_NOTI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SERVER_NOTI.swift; sourceTree = "<group>"; };
 		20982AC72E68319A003B0437 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		20CF747E2E6C5C51005816CC /* vendor.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = vendor.js; sourceTree = "<group>"; };
 		20EA7B302EC352F1002DA331 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		349088F8241B88A9004AD9A0 /* Cser21.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cser21.entitlements; sourceTree = "<group>"; };
 		349088F9241B8A3D004AD9A0 /* embed.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = embed.html; sourceTree = SOURCE_ROOT; };
@@ -109,6 +110,7 @@
 		34B77788241B82EA00787FE3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		34B7778B241B82EA00787FE3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		34B7778D241B82EB00787FE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B708E1AB2F178C2300913FD8 /* assets_bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets_bundle; path = assets; sourceTree = "<group>"; };
 		34B77790241B82EB00787FE3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		34B77792241B82EB00787FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34B77797241B82EB00787FE3 /* idezsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = idezsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,12 +125,14 @@
 		6DA9721AD4A8C2DCE7D4090F /* Pods-idezs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-idezs.release.xcconfig"; path = "Target Support Files/Pods-idezs/Pods-idezs.release.xcconfig"; sourceTree = "<group>"; };
 		7E6DC35D9FE629F4ADB4A866 /* Pods_idezsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_idezsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7FA41B00383E9A1234995BC /* Pods_idezs.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_idezs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B708E19B2F178C2300913FD8 /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = index.css; sourceTree = "<group>"; };
+		B708E19D2F178C2300913FD8 /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
+		B708E19E2F178C2300913FD8 /* pages.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = pages.js; sourceTree = "<group>"; };
+		B708E19F2F178C2300913FD8 /* vendor.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = vendor.js; sourceTree = "<group>"; };
+		B708E1A12F178C2300913FD8 /* Framework7Icons-Regular.woff */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Framework7Icons-Regular.woff"; sourceTree = "<group>"; };
+		B708E1A22F178C2300913FD8 /* Framework7Icons-Regular.woff2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Framework7Icons-Regular.woff2"; sourceTree = "<group>"; };
 		B72FD1482D1A68020097D521 /* XPZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XPZ.swift; path = ../../XPZ.swift; sourceTree = "<group>"; };
 		B72FD1492D1A68020097D521 /* X_GET_OR_CACHED.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = X_GET_OR_CACHED.swift; path = ../../X_GET_OR_CACHED.swift; sourceTree = "<group>"; };
-		B7641A092E6050A900106F9D /* index.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = index.css; sourceTree = "<group>"; };
-		B7641A0B2E6050A900106F9D /* index.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = index.js; sourceTree = "<group>"; };
-		B7641A0E2E6050A900106F9D /* Framework7Icons-Regular.woff */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Framework7Icons-Regular.woff"; sourceTree = "<group>"; };
-		B7641A0F2E6050A900106F9D /* Framework7Icons-Regular.woff2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Framework7Icons-Regular.woff2"; sourceTree = "<group>"; };
 		B7CC7AA42B57718700E268BD /* WiffiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiffiManager.swift; sourceTree = "<group>"; };
 		B7E2BD592CF856510087643F /* ezsspa-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ezsspa-Bridging-Header.h"; sourceTree = "<group>"; };
 		D8766D531E7A7766FF30FF8F /* Pods-idezs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-idezs.debug.xcconfig"; path = "Target Support Files/Pods-idezs/Pods-idezs.debug.xcconfig"; sourceTree = "<group>"; };
@@ -213,7 +217,8 @@
 		34B77785241B82EA00787FE3 /* Cser21 */ = {
 			isa = PBXGroup;
 			children = (
-				B7641A102E6050A900106F9D /* assets */,
+				B708E1A32F178C2300913FD8 /* assets */,
+				B708E1AB2F178C2300913FD8 /* assets_bundle */,
 				B72FD1492D1A68020097D521 /* X_GET_OR_CACHED.swift */,
 				B72FD1482D1A68020097D521 /* XPZ.swift */,
 				B7CC7AA42B57718700E268BD /* WiffiManager.swift */,
@@ -266,30 +271,31 @@
 			path = Cser21UITests;
 			sourceTree = "<group>";
 		};
-		B7641A0A2E6050A900106F9D /* css */ = {
+		B708E19C2F178C2300913FD8 /* css */ = {
 			isa = PBXGroup;
 			children = (
-				B7641A092E6050A900106F9D /* index.css */,
+				B708E19B2F178C2300913FD8 /* index.css */,
 			);
 			path = css;
 			sourceTree = "<group>";
 		};
-		B7641A0D2E6050A900106F9D /* js */ = {
+		B708E1A02F178C2300913FD8 /* js */ = {
 			isa = PBXGroup;
 			children = (
-				B7641A0B2E6050A900106F9D /* index.js */,
-				20CF747E2E6C5C51005816CC /* vendor.js */,
+				B708E19D2F178C2300913FD8 /* index.js */,
+				B708E19E2F178C2300913FD8 /* pages.js */,
+				B708E19F2F178C2300913FD8 /* vendor.js */,
 			);
 			path = js;
 			sourceTree = "<group>";
 		};
-		B7641A102E6050A900106F9D /* assets */ = {
+		B708E1A32F178C2300913FD8 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				B7641A0A2E6050A900106F9D /* css */,
-				B7641A0D2E6050A900106F9D /* js */,
-				B7641A0E2E6050A900106F9D /* Framework7Icons-Regular.woff */,
-				B7641A0F2E6050A900106F9D /* Framework7Icons-Regular.woff2 */,
+				B708E19C2F178C2300913FD8 /* css */,
+				B708E1A02F178C2300913FD8 /* js */,
+				B708E1A12F178C2300913FD8 /* Framework7Icons-Regular.woff */,
+				B708E1A22F178C2300913FD8 /* Framework7Icons-Regular.woff2 */,
 			);
 			path = assets;
 			sourceTree = "<group>";
@@ -425,13 +431,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				20EA7B312EC352F1002DA331 /* GoogleService-Info.plist in Resources */,
-				B7641A112E6050A900106F9D /* Framework7Icons-Regular.woff2 in Resources */,
-				B7641A122E6050A900106F9D /* index.js in Resources */,
-				B7641A132E6050A900106F9D /* index.css in Resources */,
-				20CF747F2E6C5C51005816CC /* vendor.js in Resources */,
 				20982AC82E68319A003B0437 /* PrivacyInfo.xcprivacy in Resources */,
-				B7641A142E6050A900106F9D /* Framework7Icons-Regular.woff in Resources */,
 				34B77791241B82EB00787FE3 /* LaunchScreen.storyboard in Resources */,
+				B708E1AA2F178C2300913FD8 /* assets_bundle in Resources */,
+				B708E1A42F178C2300913FD8 /* index.css in Resources */,
+				B708E1A52F178C2300913FD8 /* Framework7Icons-Regular.woff2 in Resources */,
+				B708E1A62F178C2300913FD8 /* index.js in Resources */,
+				B708E1A72F178C2300913FD8 /* pages.js in Resources */,
+				B708E1A82F178C2300913FD8 /* Framework7Icons-Regular.woff in Resources */,
+				B708E1A92F178C2300913FD8 /* vendor.js in Resources */,
 				349088FA241B8A3D004AD9A0 /* embed.html in Resources */,
 				18D1BE4024558950001B95F7 /* fonts in Resources */,
 				183E4581244AEBD800E6AB75 /* embed21.html in Resources */,
@@ -784,9 +792,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.idezs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -821,9 +827,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.idezs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
